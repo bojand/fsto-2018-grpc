@@ -83,13 +83,11 @@ Lets go back to a simpler time. The internet was simple. Servers served static H
 - Systems and applications need to communicate
 - Almost everything provides an API
 
-<br>
-
 .center[
-
-  **How do apps communicate?**
+  <img src="/img/how.png">
   
-  **How do we build APIs?**
+  **How do apps communicate?**
+  **How do we build APIs?**  
 ]
 
 ???
@@ -120,15 +118,15 @@ Talk about current state
 - Text-based and debuggable
 - Tooling for testing & inspection
 - Well-supported in most languages 
-- Cachable
+- Cacheable
 - Scalable
-- Standardized?
 - Easy?
+- Standardized?
 - Performant?
 
 ???
 
-- REST is nice we're all familair with it
+- REST is nice we're all familiar with it
 - It's relatively easy to debug
 
 ---
@@ -147,7 +145,7 @@ Talk about current state
 
 ???
 
-- Not picking on any one company but even with well used API's we see difference in opinion and structure of the very basic and fundamental factors of the REST arhitecture.
+- Not picking on any one company but even with well used API's we see difference in opinion and structure of the very basic and fundamental factors of the REST architecture.
 
 ---
 
@@ -181,7 +179,7 @@ And even if you take the time and get it all right...
 
 ???
 
-- We get requests for client libraries in perticular language
+- We get requests for client libraries in particular language
 
 ---
 
@@ -202,7 +200,7 @@ And even if you take the time and get it all right...
 
 - Example of non-resourceful: 
     * Encrypt some text
-    * Classify an image or a sentance
+    * Classify an image or a sentence
     * Restart some application / host
 
 - Maybe the same mechanisms of how we served static content is perhaps not the best way for applications to communicate to each other?
@@ -218,7 +216,7 @@ class: center, middle
 - We want the convenience of local function calls... but to be executed in distributed manner.
 - That is if we commit into the RPC paradigm in the distributed systems context
 
-- Alternative we could chose different architecture altogeher, such as asynchronous reactive systems.
+- Alternative we could chose different architecture altogether, such as asynchronous reactive systems.
 - But even then, a lot of what we talk about here may still apply in some ways.
 
 ---
@@ -230,32 +228,7 @@ class: center, middle
 ???
 
 - Originally a Google project internally called "Stubby"
-- Open sourced, mainly developerd by Google employees
-
----
-
-# FEATURES
-
-- HTTP/2
-- RPC using Protocol Buffers (or JSON)
-- Plugins to extend functionality
-- Forwards / Backwards Compatible on the wire
-- Self-Describing
-- Streaming call support
-- Mobile: Android and Objective-C, Experimental Swift
-- Polyglot: C++, Go, Java, Ruby, Node.js, Python, C#, PHP
-
-???
-
-- HTTP2 is binary, instead of textual
-- is fully multiplexed, instead of ordered and blocking
-- multiple requests can be serviced at the same time in one long-lived connection
-- allows streaming
-- allows servers to “push” responses proactively to clients
-
-- General appication framework allows for logging, security, monitoring, tracing via middleware and interceptors
-
-- gRPC core implementations in C++, Go and Java. All others based on C++ core.
+- Open sourced, mainly developed by Google employees
 
 ---
 
@@ -337,7 +310,7 @@ $ grpc_tools_node_protoc \
 - Install `protoc` compiler
 - Compile `.proto` file to generate language-specific code
 - Generated code is not to be edited
-- Generated code is not necessarily idomatic for the target language
+- Generated code is not necessarily idiomatic for the target language
 
 ---
 
@@ -356,6 +329,31 @@ $ grpc_tools_node_protoc \
 - Single client request and streaming response 
 - Duplex / bi-directional streaming
 - Streaming allows for no / easier pagination mechanisms without need for a cursor or page number
+
+---
+
+# FEATURES
+
+- HTTP/2
+- RPC using Protocol Buffers (or JSON)
+- Plugins to extend functionality
+- Forwards & backwards compatible on the wire
+- Machine-readable & self-Describing
+- Streaming call support
+- Mobile: Android and Objective-C, Experimental Swift
+- Polyglot: C++, Go, Java, Ruby, Node.js, Python, C#, PHP
+
+???
+
+- HTTP2 is binary, instead of textual
+- is fully multiplexed, instead of ordered and blocking
+- multiple requests can be serviced at the same time in one long-lived connection
+- allows streaming
+- allows servers to “push” responses proactively to clients
+
+- General application framework allows for logging, security, monitoring, tracing via middleware and interceptors
+
+- gRPC core implementations in C++, Go and Java. Most others based on C++ core.
 
 ---
 
@@ -381,11 +379,11 @@ func main() {
 ???
 
 - SayHello is the implementation of our service
-- Think of it as lamda function
+- Think of it as lambda function
 - The code in main() is a bit of boiler plate
 - Reflection is for introspection. 
   - The service can explain what services and methods this grpc server has
-  - Client can connect and build the client without knowning what lives on the server
+  - Client can connect and build the client without knowing what lives on the server
 
 ---
 
@@ -416,7 +414,7 @@ func main() {
 - We create a connection
 - We create a client from our generated code
 - And we call our function to communicate with the server
-- One interesting thing to nitice is we get timeout support for free
+- One interesting thing to notice is we get timeout support for free
 
 ---
 
@@ -449,7 +447,7 @@ main()
 ???
 
 - Same idea for Node.js
-- In case of Node.js we have the option of using dynamic generation of our client and server code, which is sometimes more convinient
+- In case of Node.js we have the option of using dynamic generation of our client and server code, which is sometimes more convenient
 
 ---
 
@@ -741,7 +739,7 @@ service Greeter {
 
 - Sometimes we want to use HTTP / JSON along with gRPC
 - `grpc-gateway` can be used to generate a Go stub that you then can create a go service proxy
-- `grpc-gateway` can be used to generate swagger deinition as well
+- `grpc-gateway` can be used to generate swagger definition as well
 - Maps streaming APIs to newline-delimited JSON streams
 - No BiDi streaming support
 
@@ -770,7 +768,7 @@ service Greeter {
 
 ---
 
-# CHANGE
+# CHANGE - ADD
 
 ```proto
 // v2
@@ -831,58 +829,52 @@ message HelloRequest {
 - First mark it deprecated and allow for clients to update.
 - Keep server logic in place
 - Once ready to remove, remove it.
-- To prohibit developers from accidentaly reusing the field name and number reserve it
+- To prohibit developers from accidentally reusing the field name and number reserve it
 - The protocol buffer compiler will complain if any future users try to use these field identifiers. 
 - Once enough time has passed that you know there will be no binary serialization of original field in the wild, remove reserved
 
 ---
 
-# Workflow & Design
+# WORKFLOW & DESIGN
+
+<img src="/img/googleapis.png" alt="Issues">
+
+???
 
 - Monorepo for all type and service definitions
 - Review API changes with normal PR process
 - Automatically test compilation, linting, etc...
 - Services version control generated code as needed
-- Be concise and consistent
-- Have a style guide
-  * https://cloud.google.com/apis/design/
-
-???
-
 - Services should be small and concise
 - Do one thing and one thing well
 - gRPC does not solve the problem of properly designing API's
-- Have a style and be consistent in API design
+- Be concise and consistent
+- Have a style for consistent API design
   * Ex: `Update` vs `Save` etc...
-- You can use Protocol Buffers as Kafka Serialization
+  * https://cloud.google.com/apis/design/
 
 ---
 
 # CHALLENGES
 
 - Load Balancing
-- Error Handling
 - Browser Support
 - Debuggability
 - Documentation
-- Poor feature parity between language suport
+- Poor feature parity between language support
   * Ex: Interceptors / middleware
-- Standardization and consistancy between languages
+- Standardization and consistency between languages
   * Ex: timeout vs. deadline
 
 ???
 
 - Load balancing is an improving issue, Envoy, Linkerd and Nginx can all support gRPC now
-- Error handling used to be ugly and poor and has been improved
-  * Used to be just an integer status and string message
-  * Node.js errors can take metadata
-  * Go provide `status` API
 - gRPC-Web was generally available at the end of October
-- gRPC documentation beyond the basic tutorial is non-existant and / or scattered and is lacking in more detailed reference and guidance on more advanced topics and examples
+- gRPC documentation beyond the basic tutorial is non-existent and / or scattered and is lacking in more detailed reference and guidance on more advanced topics and examples
 - There is inconsistent feature set between languages. For example Java and Go both have client and server interceptors, while client side interceptors were only recently added to Node.js and there is no server side middleware in Node.js at all. There are 3rd party modules to address this issue.
 - Inconsistency in semantics between languages. 
   * timeout in Go vs. deadline in Node.js
-- The fact that we are dealing with binary data means we can't just inspect data accross the wire. A new tool called Channelz can be used to gather comprehensive runtime info about connections in gRPC. It is designed to help debug live programs.
+- The fact that we are dealing with binary data means we can't just inspect data across the wire. A new tool called Channelz can be used to gather comprehensive runtime info about connections in gRPC. It is designed to help debug live programs.
 
 ---
 
@@ -908,7 +900,7 @@ message HelloRequest {
 
 **SOAP / WSDL**
 - Tied to XML (protobuf is pluggable)
-- Unnecessarily complex and infexible with regards to compatibility
+- Unnecessarily complex and inflexible with regards to compatibility
 - No Streaming
 
 **Swagger**
@@ -950,7 +942,7 @@ http://rejoiner.io
 
 ???
 
-- Interesting project to expose grpc API's via a uniform GraphQL API
+- Interesting project to expose gRPC API's via a uniform GraphQL API
 
 ---
 
@@ -971,6 +963,18 @@ http://rejoiner.io
 
 - Google - PubSub, Speech Rec
 - Netflix heavily uses Java and has been active in RFPs for Node.js
+
+---
+
+# SHOULD YOU USE IT?
+
+.center[<img src="/img/itdepends.png" alt="it depends" width="420">]
+
+???
+
+- Like everything technical... it depends. 
+- It depends on your needs and requirements and context. Do your own evaluation and research on making any technical choices.
+- I believe gRPC is a pretty good option for an RPC mechanism.
 
 ---
 
