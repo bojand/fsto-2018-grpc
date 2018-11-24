@@ -45,7 +45,7 @@ https://github.com/bojand/fsto-2018-grpc
 
 ???
 
-Lets go back to a simpler time. The internet was simple. Servers served static HTML content that was rendered in the browser.
+Lets go back to a simpler time. The internet was simple. Servers served data, usually some HTML, and browsers consumed it.
 
 ---
 
@@ -57,8 +57,8 @@ Lets go back to a simpler time. The internet was simple. Servers served static H
 
 ???
 
-- Then we started programming the web and making the content more dynamic.
-- Not only did our applications become more complex, but how we consumed the data changed.
+- Then our applications and our servers got more complex. 
+- How we worked with data and how we consumed it has changed.
 - Browsers are not the only clients of today. We have different mobile devices and platforms consuming our data.
 
 ---
@@ -92,6 +92,8 @@ Lets go back to a simpler time. The internet was simple. Servers served static H
 
 ???
 
+Today we live in a complex polyglot distributed computing landspace where everything needs to comunicate and interact with each other. So how do our systems interact in the new API-first reality?
+
 ---
 
 # REST
@@ -109,13 +111,9 @@ $ curl https://api.stripe.com/v1/charges \
 
 ???
 
-Talk about current state
-
----
-
-# HTTP/REST IS GREAT
-
-- Text-based and debuggable
+- HTTP/REST is great in many ways
+- REST is nice we're all familiar with it
+- Text-based and relatively easy to debug
 - Tooling for testing & inspection
 - Well-supported in most languages 
 - Cacheable
@@ -123,11 +121,6 @@ Talk about current state
 - Easy?
 - Standardized?
 - Performant?
-
-???
-
-- REST is nice we're all familiar with it
-- It's relatively easy to debug
 
 ---
 
@@ -165,7 +158,7 @@ And even if you take the time and get it all right...
 
 ---
 
-# REST API CONSIDERATIONS
+# REST API DEFICIENCIES
 
 - HTTP/1 is not performant
 - Text-based protocol is developer-friendly but inefficient
@@ -194,8 +187,8 @@ And even if you take the time and get it all right...
 .left[<img src="/img/twilio-logo-red.svg" alt="Twilio Logo" height="42px">]
 
 - `200 OK` for `GET`
-- `201 OK` for `POST` and `PUT`
-- `204 OK` for `DELETE`
+- `201 CREATED` for `POST` and `PUT`
+- `204 NO CONTENT` for `DELETE`
 
 .left[<img src="/img/Stripe logo - blue.svg" alt="Stripe Logo" height="56px">]
 
@@ -225,6 +218,10 @@ class: center, middle
 
 <blockquote><strong>A high performance, open-source universal RPC framework</strong></blockquote>
 
+http://grpc.io/
+
+https://github.com/grpc-ecosystem/awesome-grpc
+
 ???
 
 - Originally a Google project internally called "Stubby"
@@ -245,7 +242,7 @@ class: center, middle
 - 1.9 'g' stands for ['glossy'](https://github.com/grpc/grpc/tree/v1.9.x)
 - 1.10 'g' stands for ['glamorous'](https://github.com/grpc/grpc/tree/v1.10.x)
 - 1.11 'g' stands for ['gorgeous'](https://github.com/grpc/grpc/tree/v1.11.x)
-- ... ["g stands for" version list](https://github.com/grpc/grpc/blob/master/doc/g_stands_for.md)
+- ... https://github.com/grpc/grpc/blob/master/doc/g_stands_for.md
 
 ???
 
@@ -278,6 +275,7 @@ message HelloReply {
 
 - This is a Protocol Buffer definition file
 - It's Interface Description Language used to describe types and services
+- Efficient binary serialization format
 - Machine-readable & self-describing
 - This is simple and concise
 - Just by reading it we can understand the general idea of this service and the API contract
@@ -382,17 +380,14 @@ func main() {
 
 ```go
 func main() {
-	conn, err := grpc.Dial("localhost:50051",
+	conn, _ := grpc.Dial("localhost:50051",
 		grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(),
-		10*time.Second)
+*	c := pb.NewGreeterClient(conn)
+*	ctx, cancel := context.WithTimeout(context.Background(),
+*		10*time.Second)
 	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: "world"})
+*	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: "world"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
@@ -424,7 +419,7 @@ function sayHello(call, callback) {
 }
 
 function main() {
-  var server = new grpc.Server()
+  const server = new grpc.Server()
   server.addService(proto.Greeter.service, 
     { sayHello: sayHello })
   server.bind('0.0.0.0:50051',
@@ -511,11 +506,11 @@ function sayHellos(call) {
   let n = 0
   const timer = setInterval(() => {
     if (n < call.request.count) {
-        call.write({ message: 'Hello ' + call.request.name })
+*        call.write({ message: 'Hello ' + call.request.name })
         n++
     } else {
         clearInterval(timer)
-        call.end()
+*        call.end()
     }
   }, 200)
 }
@@ -553,15 +548,15 @@ call.on('end', () => console.log('done'))
 func (s *server) GreetChat(stream pb.Greeter_GreetChatServer)
 error {
 	for {
-		in, err := stream.Recv()
+*		in, err := stream.Recv()
 		if err == io.EOF {
 			return nil
 		}
 		if err != nil {
 			return err
 		}
-		msg := &pb.HelloRes{Message: "Hello " + in.Name}
-		if err := stream.Send(msg); err != nil {
+*		msg := &pb.HelloRes{Message: "Hello " + in.Name}
+*		if err := stream.Send(msg); err != nil {
 			return err
 		}
 	}
@@ -577,16 +572,16 @@ error {
 # BIDI STREAMING - CLIENT
 
 ```js
-call = client.greetChat()
+*call = client.greetChat()
 const NAMES = ['Bob', 'Kate', 'Jim', 'Sara']
 let n = 0
 const timer = setInterval(() => {
   if (n < NAMES.length) {
-    call.write({ name: NAMES[n] })
+*    call.write({ name: NAMES[n] })
     n++
   } else {
     clearInterval(timer)
-    call.end()
+*    call.end()
   }
 }, 200)
 
@@ -826,7 +821,9 @@ message HelloRequest {
 
 # WORKFLOW & DESIGN
 
-<img src="/img/googleapis.png" alt="Issues">
+<img src="/img/googleapis.png" alt="Issues" height="400">
+
+https://cloud.google.com/apis/design/
 
 ???
 
