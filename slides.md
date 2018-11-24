@@ -131,24 +131,6 @@ Talk about current state
 
 ---
 
-# EXAMPLES
-
-.left[<img src="/img/twilio-logo-red.svg" alt="Twilio Logo" height="42px">]
-
-- `200 OK` for `GET`
-- `201 OK` for `POST` and `PUT`
-- `204 OK` for `DELETE`
-
-.left[<img src="/img/Stripe logo - blue.svg" alt="Stripe Logo" height="56px">]
-
-- `200 OK` for all successful requests
-
-???
-
-- Not picking on any one company but even with well used API's we see difference in opinion and structure of the very basic and fundamental factors of the REST architecture.
-
----
-
 # REST API CONSIDERATIONS
 
 - Schema
@@ -204,6 +186,24 @@ And even if you take the time and get it all right...
     * Restart some application / host
 
 - Maybe the same mechanisms of how we served static content is perhaps not the best way for applications to communicate to each other?
+
+---
+
+# EXAMPLES
+
+.left[<img src="/img/twilio-logo-red.svg" alt="Twilio Logo" height="42px">]
+
+- `200 OK` for `GET`
+- `201 OK` for `POST` and `PUT`
+- `204 OK` for `DELETE`
+
+.left[<img src="/img/Stripe logo - blue.svg" alt="Stripe Logo" height="56px">]
+
+- `200 OK` for all successful requests
+
+???
+
+- Not picking on any one company but even with well used API's we see difference in opinion and structure of the very basic and fundamental factors of the REST architecture.
 
 ---
 
@@ -278,13 +278,12 @@ message HelloReply {
 
 - This is a Protocol Buffer definition file
 - It's Interface Description Language used to describe types and services
-- I'ts machine readable
-
+- Machine-readable & self-describing
 - This is simple and concise
 - Just by reading it we can understand the general idea of this service and the API contract
-
 - `protoc` compiles `.proto` file to generate language-specific code
 - `protoc` compiler with plugin support
+- Plugins to extend functionality
 
 ---
 
@@ -332,27 +331,20 @@ $ grpc_tools_node_protoc \
 
 ---
 
-# FEATURES
+# DETAILS
 
 - HTTP/2
 - RPC using Protocol Buffers (or JSON)
-- Plugins to extend functionality
 - Forwards & backwards compatible on the wire
-- Machine-readable & self-Describing
 - Streaming call support
 - Mobile: Android and Objective-C, Experimental Swift
 - Polyglot: C++, Go, Java, Ruby, Node.js, Python, C#, PHP
 
 ???
 
-- HTTP2 is binary, instead of textual
-- is fully multiplexed, instead of ordered and blocking
-- multiple requests can be serviced at the same time in one long-lived connection
-- allows streaming
-- allows servers to “push” responses proactively to clients
-
-- General application framework allows for logging, security, monitoring, tracing via middleware and interceptors
-
+- HTTP2 is binary protocol that is fully multiplexed, instead of ordered and blocking
+- Multiple requests can be serviced at the same time in one long-lived connection
+- Streaming support
 - gRPC core implementations in C++, Go and Java. Most others based on C++ core.
 
 ---
@@ -379,7 +371,6 @@ func main() {
 ???
 
 - SayHello is the implementation of our service
-- Think of it as lambda function
 - The code in main() is a bit of boiler plate
 - Reflection is for introspection. 
   - The service can explain what services and methods this grpc server has
@@ -737,17 +728,14 @@ service Greeter {
 
 ???
 
-- Sometimes we want to use HTTP / JSON along with gRPC
-- `grpc-gateway` can be used to generate a Go stub that you then can create a go service proxy
-- `grpc-gateway` can be used to generate swagger definition as well
-- Maps streaming APIs to newline-delimited JSON streams
-- No BiDi streaming support
+- Sometimes we want to suport HTTP / JSON along with gRPC
+- In that case we can use a `protoc` plugin to annotate our service definition with REST API details
+- `grpc-gateway` plugin can be used to generate code for a proxy service that will handle our HTTP/JSON requests
+- `grpc-gateway` can be used to generate swagger definition and documentation
 
-- Envoy's gRPC-JSON transcoder filter allows a RESTful JSON API client to send requests to Envoy over HTTP and get proxied to a gRPC service. The HTTP mapping for the gRPC service has to be defined by custom options.
-- for gRPC stream request parameters, Envoy expects an array of messages, and it returns an array of messages for stream response parameters.
-- No BiDi streaming support
+- Alternatively Envoy's gRPC-JSON transcoder filter can be used to allow a RESTful JSON API client to send requests to Envoy over HTTP and get proxied to a gRPC service. 
 
-- There are projects in Go at least that let you serve both HTTP+JSON and gRPC from single service on different ports
+- Neither solution provide BiDi streaming support
 
 ---
 
@@ -774,28 +762,29 @@ service Greeter {
 // v2
 message HelloRequest {
   string name = 1;
-  bool reverse = 2;
+  bool capitalize = 2;
 }
 
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
-  string reversed = 2;
 }
 ```
 
 ???
 
 **Client v1 <-> Server v2**
-- client will not know about reverse, and it will default to `false`
+- client will not know about capitalize, and it will default to `false`
 - client will get just the message
+
+Generally servers would be released before clients.
 
 **Client v2 <-> Server v1**
 - client may set the flag to `true`
-- server will not know about `reverse` and will return old reply format
-- client will get a message without `reversed` which will get a default empty string
+- server will not know about `capitalize` and will return old reply format
+- client will get a message
 
-Generally servers would be released before clients.
+
 
 ---
 
@@ -805,7 +794,7 @@ Generally servers would be released before clients.
 // v3
 message HelloRequest {
   string name = 1 [deprecated=true];
-  bool reverse = 2;
+  bool capitalize = 2;
   string first_name = 3;
   string last_name = 4;
 }
@@ -906,8 +895,7 @@ message HelloRequest {
 **Swagger**
 - It is machine readable
 - Lots of tooling
-- Tied to HTTP/JSON
-- Performance issues and no streaming
+- Tied to HTTP/JSON, Performance issues and no streaming
 - Very verbose and cumbersome, a single definition takes pages of code
 
 **Thrift**
