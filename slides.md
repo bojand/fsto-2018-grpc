@@ -620,6 +620,7 @@ log.Printf("Greeting: %s", res.Message)
 
 ???
 
+- gRPC "Headers"
 - We can use metadata to send additional contextual information about calls
 - This can be used for authentication, request id, or tracing
 - All implementations should support it
@@ -630,28 +631,26 @@ log.Printf("Greeting: %s", res.Message)
 # METADATA - SERVER
 
 ```go
-func (s *server) SayHello(ctx context.Context, 
-  in *pb.HelloRequest) (*pb.HelloReply, error) {
-* md, _ := metadata.FromIncomingContext(ctx)
-	for k, v := range md {
-		fmt.Printf("%s: %s\n", k, v)
-	}
+function sayHello(call, callback) {
+  const metadata = call.metadata.getMap()
+  for (const k in metadata) {
+    console.log(`${k}: ${metadata[k]}`)
+  }
 
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+  callback(null, { message: 'Hello ' + call.request.name })
 }
 ```
 
 ```sh
-:authority: [localhost:50051]
-content-type: [application/grpc]
-user-agent: [grpc-go/1.16.0]
-token: [xyz]
-request-id: [123]
+user-agent: grpc-go/1.16.0
+token: xyz
+request-id: 123
 ```
 
 ???
 
-- Example of getting metadata on server
+- Example of getting metadata on server in Node.js
+- Similarly Go provides a utility function to get metadata from context
 
 ---
 
@@ -869,6 +868,8 @@ https://cloud.google.com/apis/design/
 ???
 
 - Can we have middleware please?
+- All github issues for people asking for Node.js server middleware
+- There are other open source libraries and frameworks that expose this functionality
 
 ---
 
@@ -876,7 +877,6 @@ https://cloud.google.com/apis/design/
 
 - SOAP / WSDL
 - Swagger & JSON Schema
-- JSON-RPC
 - Thrift
 - MessagePack
 - Twirp

@@ -6,6 +6,11 @@ var hello_proto = grpc.loadPackageDefinition(packageDefinition).helloworld
 
 // Implements the SayHello RPC method.
 function sayHello(call, callback) {
+  const metadata = call.metadata.getMap()
+  for (const k in metadata) {
+    console.log(`${k}: ${metadata[k]}`)
+  }
+
   callback(null, { message: 'Hello ' + call.request.name })
 }
 
