@@ -630,7 +630,7 @@ log.Printf("Greeting: %s", res.Message)
 
 # METADATA - SERVER
 
-```go
+```js
 function sayHello(call, callback) {
   const metadata = call.metadata.getMap()
   for (const k in metadata) {
