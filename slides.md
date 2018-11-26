@@ -207,10 +207,6 @@ class: center, middle
 ???
 
 - We want the convenience of local function calls... but to be executed in distributed manner.
-- That is if we commit into the RPC paradigm in the distributed systems context
-
-- Alternative we could chose different architecture altogether, such as asynchronous reactive systems.
-- But even then, a lot of what we talk about here may still apply in some ways.
 
 ---
 
@@ -496,49 +492,6 @@ message HelloRes {
 
 - Here we see different types in Protocol Buffer definition
 - And an example of streaming requests
-
----
-
-# SERVER STREAMING - SERVER
-
-```js
-function sayHellos(call) {
-  let n = 0
-  const timer = setInterval(() => {
-    if (n < call.request.count) {
-*        call.write({ message: 'Hello ' + call.request.name })
-        n++
-    } else {
-        clearInterval(timer)
-*        call.end()
-    }
-  }, 200)
-}
-```
-
-???
-
-- The call is essentially a regular stream that we write messages to
-- The `setInterval()` is used just to simulate some expensive operation like reading from the database or performing some asynchronous computation
-
----
-
-# SERVER STREAMING - CLIENT
-
-```js
-const call = client.sayHellos(
-  { name: 'world', count: 5 })
-
-call.on('data', 
-  ({ message }) => console.log('Greeting: ', message))
-
-call.on('end', () => console.log('done'))
-```
-
-???
-
-- We call our method and get a stream back
-- We just read the stream normally to get the data
 
 ---
 
