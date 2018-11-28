@@ -27,10 +27,11 @@ https://github.com/bojand/fsto-2018-grpc
 
 ???
 
-- My name is Bojan Djurkovic and I am a Lead Software Engineer at Cvent
-- It's a company that makes software solutions for managing events similar to this one
-- But we're not involved with this event
-- I've done a lot of things at Cvent over time, but most of my day to day activities currently involve a lot of Java and Kafka
+- My name is Bojan Djurkovic and I am from Fredericton New Brunswick.
+- I work as a Lead Software Engineer at Cvent
+- Cvent a company headquartered in Washington DC, and we make software solutions for planning and managing events similar to this one
+- But we're not involved with this event, and I am here on my own
+- Currently most of my work at Cvent involves Java and Kafka
 - On the side I try to explore different technologies and do some open source
 - Over the past couple of years most of that has been focused on gRPC
 - Which is what we're going to be talking about today...
@@ -65,7 +66,7 @@ Lets go back to a simpler time. The internet was simple. Servers served data, us
 
 # MICROSERVICES!
 
-.center[<img src="/img/microservices.png" alt="microservices">]
+.center[<img src="/img/microservices2.png" alt="microservices" width="500">]
 
 .footnote[Source: ArcGIC]
 
@@ -689,10 +690,10 @@ service Greeter {
 # DEALING WITH CHANGE
 
 - Name of fields are less important than field numbers
-- Adding fields is safe
 - Do not change the type or number of a field
+- Adding fields is safe
 - Deprecate a field before removal
-- Do not reuse a field number unless absolutely sure
+- Reuse a field number if absolutely sure
 - Be aware of the default values for the data types
 - If you need a version set it in package name 
   * Ex: `company.service.v1`
