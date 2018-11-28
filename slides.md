@@ -889,9 +889,9 @@ http://rejoiner.io
 
 - Google - Google Cloud Services APIs and internally other products
 - Square - Most internal RPC
-- CoreOS - etcd v3 API is entirelty gRPC
 - Lyft
 - Netflix
+- CoreOS - etcd v3 API is entirely gRPC
 - Coockroach Labs
 - Bugsnag
 - VSCO
