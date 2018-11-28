@@ -31,6 +31,7 @@ https://github.com/bojand/fsto-2018-grpc
 - I work as a Lead Software Engineer at Cvent
 - Cvent a company headquartered in Washington DC, and we make software solutions for planning and managing events similar to this one
 - But we're not involved with this event, and I am here on my own
+- I should mention though that we are hiring and the cost of living in Fredericton is more favourable than Toronto 
 - Currently most of my work at Cvent involves Java and Kafka
 - On the side I try to explore different technologies and do some open source
 - Over the past couple of years most of that has been focused on gRPC
@@ -60,7 +61,7 @@ Lets go back to a simpler time. The internet was simple. Servers served data, us
 
 - Then our applications and our servers got more complex. 
 - How we worked with data and how we consumed it has changed.
-- Browsers are not the only clients of today. We have different mobile devices and platforms consuming our data.
+- Browsers are not the only clients of today. We have different mobile and embedded devices and platforms consuming our data.
 
 ---
 
@@ -74,7 +75,7 @@ Lets go back to a simpler time. The internet was simple. Servers served data, us
 
 - As our systems grew and evolved, to overcome the challenges of scale we started breaking up the monolith into microservices
 - A single PHP application became a number of different services written in Pyton, Java, Node.js, Go and others.
-- How systems and different application communicate and talk to each other has drastically changed over the past two decades.
+- Our system's architecture has drastically changed over the past dozen decades.
 
 ---
 
