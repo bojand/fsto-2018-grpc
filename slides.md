@@ -29,9 +29,9 @@ https://github.com/bojand/fsto-2018-grpc
 
 - My name is Bojan Djurkovic and I am from Fredericton New Brunswick.
 - I work as a Lead Software Engineer at Cvent
-- Cvent a company headquartered in Washington DC, and we make software solutions for planning and managing events similar to this one
-- But we're not involved with this event, and I am here on my own
-- I should mention though that we are hiring and the cost of living in Fredericton is more favourable than Toronto 
+- Cvent a company that makes software solutions for planning and managing conventions and conferences and events similar to this one, but we're not involved with this event, and I am here kind of on my own
+- We're headquartered in Washington DC, and we're probably one of the bigger companies you have never heard of. We're around 3500 employees with offices all over the world and we have 2 offices in Canada, in Vancouver and Fredericton 
+- I should mention that we are hiring and the cost of living in Fredericton is more favourable than Toronto 
 - Currently most of my work at Cvent involves Java and Kafka
 - On the side I try to explore different technologies and do some open source
 - Over the past couple of years most of that has been focused on gRPC
@@ -59,9 +59,9 @@ Lets go back to a simpler time. The internet was simple. Servers served data, us
 
 ???
 
-- Then our applications and our servers got more complex. 
+- Then our applications and our servers got more complex and dynamic. 
 - How we worked with data and how we consumed it has changed.
-- Browsers are not the only clients of today. We have different mobile and embedded devices and platforms consuming our data.
+- Today browsers are not the only clients we have to deal with. We have different mobile and embedded devices and platforms using our applications.
 
 ---
 
@@ -73,28 +73,24 @@ Lets go back to a simpler time. The internet was simple. Servers served data, us
 
 ???
 
-- As our systems grew and evolved, to overcome the challenges of scale we started breaking up the monolith into microservices
+- As our systems grew and evolved, to overcome the challenges of scale both technically and organizationally we started breaking up the monolith into microservices
 - A single PHP application became a number of different services written in Pyton, Java, Node.js, Go and others.
-- Our system's architecture has drastically changed over the past dozen decades.
+- Our systems' architecture has drastically changed over the past decade or so.
 
 ---
 
 # PRESENT DAY
 
 - Complex polyglot distributed computing landscape
-- Systems and applications need to communicate
-- Almost everything provides an API
+- "API-First"
 
 .center[
   <img src="/img/how.png">
-  
-  **How do apps communicate?**
-  **How do we build APIs?**  
 ]
 
 ???
 
-Today we live in a complex polyglot distributed computing landspace where everything needs to comunicate and interact with each other. So how do our systems interact in the new API-first reality?
+Today we live in a complex polyglot distributed computing landspace where numerous services and applications needs to interact with each other. So how do all these different components communicate in this new API-first reality?
 
 ---
 
@@ -113,8 +109,7 @@ $ curl https://api.stripe.com/v1/charges \
 
 ???
 
-- HTTP/REST is great in many ways
-- REST is nice we're all familiar with it
+- HTTP/REST is great in many ways and  we're all familiar with it
 - Text-based and relatively easy to debug
 - Tooling for testing & inspection
 - Well-supported in most languages 
@@ -145,7 +140,7 @@ $ curl https://api.stripe.com/v1/charges \
 
 ???
 
-And even if you take the time and get it all right...
+So if we are building a REST API, what are all the things we need to consider? This is probably not an exhaustive or complete list, but just some items that we need to think about.
 
 ---
 
@@ -177,10 +172,9 @@ And even if you take the time and get it all right...
 
 - Example of non-resourceful: 
     * Encrypt some text
-    * Classify an image or a sentence
-    * Restart some application / host
-
-- Maybe the same mechanisms of how we served static content is perhaps not the best way for applications to communicate to each other?
+    * Restart some application or host
+    * Describe an image
+    * Classify a sentence for sentiment analysis
 
 ---
 
@@ -198,7 +192,9 @@ And even if you take the time and get it all right...
 
 ???
 
-- Not picking on any one company but even with well used API's we see difference in opinion and structure of the very basic and fundamental factors of the REST architecture.
+- Not picking on any one company here these are just a couple of examples of well-established and successful API products. 
+
+- Even with these popular API's we see a difference in opinion on the very basic and fundamental factors of the how REST API's should be designed and structured.
 
 ---
 
@@ -208,7 +204,7 @@ class: center, middle
 
 ???
 
-- We want the convenience of local function calls... but to be executed in distributed manner.
+- What we really want is the the convenience of local function calls... but executed in distributed manner.
 
 ---
 
@@ -273,8 +269,7 @@ message HelloReply {
 
 - This is a Protocol Buffer definition file
 - It's Interface Description Language used to describe types and services
-- Efficient binary serialization format
-- Machine-readable & self-describing
+- It's also an efficient binary serialization format
 - This is simple and concise
 - Just by reading it we can understand the general idea of this service and the API contract
 - `protoc` compiles `.proto` file to generate language-specific code
@@ -332,9 +327,8 @@ $ grpc_tools_node_protoc \
 - HTTP/2
 - RPC using Protocol Buffers (or JSON)
 - Forwards & backwards compatible on the wire
-- Streaming call support
 - Mobile: Android and Objective-C, Experimental Swift
-- Polyglot: C++, Go, Java, Ruby, Node.js, Python, C#, PHP
+- Polyglot: C++, Go, Java, Ruby, Node.js, Python, C#, PHP, Dart
 
 ???
 
@@ -445,16 +439,16 @@ const proto =
   grpc.loadPackageDefinition(packageDefinition).helloworld;
 
 function main() {
-  const client = new proto.Greeter(
-    'localhost:50051', grpc.credentials.createInsecure());
+*  const client = new proto.Greeter(
+*   'localhost:50051', grpc.credentials.createInsecure());
 
-  const deadline = 
-    new Date().setSeconds(new Date().getSeconds() + 5)
+* const deadline = 
+*   new Date().setSeconds(new Date().getSeconds() + 5)
 
-  client.sayHello({ name: 'world' }, { deadline }, 
-    (err, response) => {
+* client.sayHello({ name: 'world' }, { deadline }, 
+*   (err, response) => {
       console.log('Greeting: ', response.message);
-  });
+*  });
 }
 
 main();
@@ -482,7 +476,6 @@ service Greeter {
 
 message HelloReq {
     string name = 1;
-    int32 count = 2;
 }
 
 message HelloRes {
@@ -540,10 +533,10 @@ const timer = setInterval(() => {
   }
 }, 200)
 
-call.on('data',
-  ({ message }) => console.log('Greeting:', message))
+*call.on('data',
+*  ({ message }) => console.log('Greeting:', message))
 
-call.on('end', () => console.log('done'))
+*call.on('end', () => console.log('done'))
 ```
 
 ???
@@ -587,7 +580,7 @@ log.Printf("Greeting: %s", res.Message)
 
 ```js
 function sayHello(call, callback) {
-  const metadata = call.metadata.getMap()
+*  const metadata = call.metadata.getMap()
   for (const k in metadata) {
     console.log(`${k}: ${metadata[k]}`)
   }
@@ -605,6 +598,7 @@ request-id: 123
 ???
 
 - Example of getting metadata on server in Node.js
+- gRPC automatically adds user-agent metadata field
 - Similarly Go provides a utility function to get metadata from context
 
 ---
@@ -649,9 +643,14 @@ protoc helloworld.proto \
 
 ???
 
-- We generate types like normal using `protoc`
-- In our web application we use the web client and the generated types to communicate with the server
-- Envoy must be used as a proxy for web clients to talk to
+- Kinda
+- We generate types like normal using `protoc`, this generates types and client to be used in our browser application in React, Vue or Angular and others
+- In our web application we use the web client and the generated types to communicate with the server and we can have our Protocol Buffer types in the whole stack
+- To enable browser support the protocol implemented here is actually slightly different than what gRPC uses in the rest of the ecosystem. Therefore we need a middle proxy to do translation of requests from the browser to our gRPC services.
+- By default the gRPC project recomments using the Envoy proxy to accomplish this, and they do provide example configuration files to set this all up.
+- In case you don't know Envoy is an open source proxy server implemented by Lyft.
+- Some of you may be following re:Invent announcements this week, and the new AWS service mash product actually uses this Envoy proxt as well.
+- It's important to note that right now only Unary and server streaming calls are supported
 - Nginx can also work
 
 ---
@@ -683,6 +682,8 @@ service Greeter {
 - `grpc-gateway` can be used to generate swagger definition and documentation
 
 - Alternatively Envoy's gRPC-JSON transcoder filter can be used to allow a RESTful JSON API client to send requests to Envoy over HTTP and get proxied to a gRPC service. 
+
+- There are
 
 - Neither solution provide BiDi streaming support
 
@@ -722,11 +723,11 @@ message HelloReply {
 
 ???
 
+Generally servers would be released before clients.
+
 **Client v1 <-> Server v2**
 - client will not know about capitalize, and it will default to `false`
 - client will get just the message
-
-Generally servers would be released before clients.
 
 **Client v2 <-> Server v1**
 - client may set the flag to `true`
@@ -740,18 +741,18 @@ Generally servers would be released before clients.
 ```proto
 // v3
 message HelloRequest {
-  string name = 1 [deprecated=true];
+*  string name = 1 [deprecated=true];
   bool capitalize = 2;
-  string first_name = 3;
-  string last_name = 4;
+*  string first_name = 3;
+*  string last_name = 4;
 }
 ```
 
 ```proto
 // v4
 message HelloRequest {
-  reserved 1;
-  reserved "name";
+*  reserved 1;
+*  reserved "name";
 
   bool reverse = 2;
   string first_name = 3;
@@ -766,7 +767,7 @@ message HelloRequest {
 - Deprecating a field may have meaningul result in code generated by protoc in some languages. Foe example for Java it will use the @Deprecated annotion.
 - Keep server logic in place
 - Once ready to remove, remove it.
-- To prohibit developers from accidentally reusing the field name and number reserve it
+- We can reserve a field number and name to prohibit developers from accidentally reusing it in future changes to the message
 - The protocol buffer compiler will complain if any future users try to use these field identifiers. 
 - Once enough time has passed that you know there will be no binary serialization of original field in the wild, remove reserved
 
@@ -800,20 +801,20 @@ https://cloud.google.com/apis/design/
 - Browser Support
 - Debuggability
 - Documentation
-- Poor feature parity between language support
+- Poor feature parity between languages
   * Ex: Interceptors / middleware
-- Standardization and consistency between languages
+- Inconsistency between languages
   * Ex: timeout vs. deadline
 
 ???
 
 - Load balancing is an improving issue, Envoy, Linkerd and Nginx can all support gRPC now
 - gRPC-Web was generally available at the end of October
+- The fact that we are dealing with binary data means we can't just inspect data across the wire. A new tool called Channelz can be used to gather comprehensive runtime info about connections in gRPC. It is designed to help debug live programs.
 - gRPC documentation beyond the basic tutorial is non-existent and / or scattered and is lacking in more detailed reference and guidance on more advanced topics and examples
 - There is inconsistent feature set between languages. For example Java and Go both have client and server interceptors, while client side interceptors were only recently added to Node.js and there is no server side middleware in Node.js at all. There are 3rd party modules to address this issue.
 - Inconsistency in semantics between languages. 
   * timeout in Go vs. deadline in Node.js
-- The fact that we are dealing with binary data means we can't just inspect data across the wire. A new tool called Channelz can be used to gather comprehensive runtime info about connections in gRPC. It is designed to help debug live programs.
 
 ---
 
@@ -821,7 +822,7 @@ https://cloud.google.com/apis/design/
 
 ???
 
-- Can we have middleware please?
+- Can we have server-side middleware please?
 - All github issues for people asking for Node.js server middleware
 - There are other open source libraries and frameworks that expose this functionality
 
@@ -912,8 +913,8 @@ http://rejoiner.io
 ???
 
 - Like everything technical... it depends. 
-- It depends on your needs and requirements and context. Do your own evaluation and research on making any technical choices.
-- I believe gRPC is a pretty good option for an RPC mechanism.
+- It depends on your needs and requirements and context. It's important to do your own evaluation and research and really determine what compromises you're OK with for what benefits when making any kind of decision on technical choices.
+- I believe gRPC is a pretty good option for an RPC mechanism, at least for inter-service communication in microservices architecture.
 
 ---
 
