@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "fsto.greeter";
+option java_outer_classname = "GreeterProto";
+option objc_class_prefix = "GRT";
+
+package greeter;
+
+service Greeter {
+    rpc SayHello (HelloReq) returns (HelloRes) {}
+    rpc SayHellos (HelloReq) returns (stream HelloRes) {}
+    rpc GreetMany (stream HelloReq) returns (HelloRes) {}
+    rpc GreetChat (stream HelloReq) returns (stream HelloRes) {}
+}
+
+message HelloReq {
+    string name = 1;
+    int32 count = 2;
+}
+
+message HelloRes {
+    string message = 1;
+}
