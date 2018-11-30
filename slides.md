@@ -635,7 +635,7 @@ protoc helloworld.proto \
 ???
 
 - You're probably wondering if we can use this in the browser?
-- The short anser is Kinda
+- The short answer is Kinda
 - The longer answer:
 - We generate types like normal using `protoc`, this generates types and client to be used in our browser application in React, Vue or Angular and others
 - In our web application we use the web client and the generated types to communicate with the server and we can have our Protocol Buffer types in the whole stack
