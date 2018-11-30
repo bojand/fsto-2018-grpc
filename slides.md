@@ -644,7 +644,9 @@ protoc helloworld.proto \
 
 ???
 
-- Kinda
+- You're probably wondering if we can use this in the browser?
+- The short anser is Kinda
+- The longer answer:
 - We generate types like normal using `protoc`, this generates types and client to be used in our browser application in React, Vue or Angular and others
 - In our web application we use the web client and the generated types to communicate with the server and we can have our Protocol Buffer types in the whole stack
 - To enable browser support the protocol implemented here is actually slightly different than what gRPC uses in the rest of the ecosystem. Therefore we need a middle proxy to do translation of requests from the browser to our gRPC services.
