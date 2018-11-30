@@ -17,8 +17,6 @@ class: center, middle
 
 # ABOUT ME
 
-Bojan Djurkovic
-
 Lead Software Engineer @ Cvent
 
 @bojantweets
@@ -27,15 +25,7 @@ https://github.com/bojand/fsto-2018-grpc
 
 ???
 
-- My name is Bojan Djurkovic and I am from Fredericton New Brunswick.
-- I work as a Lead Software Engineer at Cvent
-- Cvent a company that makes software solutions for planning and managing conventions and conferences and events similar to this one, but we're not involved with this event, and I am here kind of on my own
-- We're headquartered in Washington DC, and we're probably one of the bigger companies you have never heard of. We're around 3500 employees with offices all over the world and we have 2 offices in Canada, in Vancouver and Fredericton 
-- I should mention that we are hiring and the cost of living in Fredericton is more favourable than Toronto 
-- Currently most of my work at Cvent involves Java and Kafka
-- On the side I try to explore different technologies and do some open source
-- Over the past couple of years most of that has been focused on gRPC
-- Which is what we're going to be talking about today...
+Notes
 
 ---
 
