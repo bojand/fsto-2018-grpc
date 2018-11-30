@@ -334,7 +334,8 @@ $ grpc_tools_node_protoc \
 
 - HTTP2 is binary protocol that is fully multiplexed, instead of ordered and blocking
 - Multiple requests can be serviced at the same time in one long-lived connection
-- Streaming support
+- RPC using Protocol Buffers (or JSON)
+- Forwards & backwards compatible on the wire
 - gRPC core implementations in C++, Go and Java. Most others based on C++ core.
 
 ---
@@ -649,9 +650,9 @@ protoc helloworld.proto \
 - To enable browser support the protocol implemented here is actually slightly different than what gRPC uses in the rest of the ecosystem. Therefore we need a middle proxy to do translation of requests from the browser to our gRPC services.
 - By default the gRPC project recomments using the Envoy proxy to accomplish this, and they do provide example configuration files to set this all up.
 - In case you don't know Envoy is an open source proxy server implemented by Lyft.
-- Some of you may be following re:Invent announcements this week, and the new AWS service mash product actually uses this Envoy proxt as well.
+- Some of you may be following re:Invent announcements this week, and the new AWS service mash product actually uses this Envoy proxy as well.
 - It's important to note that right now only Unary and server streaming calls are supported
-- Nginx can also work
+- Nginx can also work in this situation but the official recommendation is the Envoy proxy
 
 ---
 
@@ -683,9 +684,7 @@ service Greeter {
 
 - Alternatively Envoy's gRPC-JSON transcoder filter can be used to allow a RESTful JSON API client to send requests to Envoy over HTTP and get proxied to a gRPC service. 
 
-- There are
-
-- Neither solution provide BiDi streaming support
+- There are intricacies with how both handle streaming and neither solution provide BiDi streaming support
 
 ---
 
@@ -703,7 +702,13 @@ service Greeter {
 ???
 
 - Field name can be changed and will not effect serialization
-
+- We do not want to change the type of number of a field
+- Adding fields is safe
+- When remving a field we should deprecate it first and there is a mechanism for doing that
+- One we remove a field we do not want to reuse that field number of field name until we're absolutely sure that the old version of it is not used by any clients
+- When deserializing data gRPC always assigns a default value to any fields present in the message definition and not present in the payload.
+- boolean will get defaulted to fale, string to empty string, int to 0
+- so we need to be aware of that sideeffect when implementing the login in our API's
 ---
 
 # CHANGE - ADD
