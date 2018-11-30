@@ -816,7 +816,7 @@ https://cloud.google.com/apis/design/
 - Load balancing is an improving issue, Envoy, Linkerd and Nginx can all support gRPC now
 - gRPC-Web was generally available at the end of October
 - The fact that we are dealing with binary data means we can't just inspect data across the wire. A new tool called Channelz can be used to gather comprehensive runtime info about connections in gRPC. It is designed to help debug live programs.
-- gRPC documentation beyond the basic tutorial is non-existent and / or scattered and is lacking in more detailed reference and guidance on more advanced topics and examples
+- On the official website there is reference documentation and tutorials but it's pretty basic. Anything more advanced is either non-existent and / or scattered and is lacking in more detailed reference and guidance on more advanced topics and examples
 - There is inconsistent feature set between languages. For example Java and Go both have client and server interceptors, while client side interceptors were only recently added to Node.js and there is no server side middleware in Node.js at all. There are 3rd party modules to address this issue.
 - Inconsistency in semantics between languages. 
   * timeout in Go vs. deadline in Node.js
@@ -868,7 +868,7 @@ https://cloud.google.com/apis/design/
 - Good alternative if you're not comfortable with the hard HTTP2 requirement
 
 **GraphQL**
-- Interesting option for clients / frontends to query exactly the data they need
+- Interesting option for clients / frontends to selectively query exactly the data they need
 - Human readable and schema-based with types
 - Still works over HTTP and no streaming
 - Perhaps not ideal for service <-> service communication
