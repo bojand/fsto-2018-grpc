@@ -5,6 +5,10 @@
 
 November 29 & 30, 2018
 
+### Video
+
+[YouTube](https://www.youtube.com/watch?v=JnFQlTty64A)
+
 ### Presentation
 
 ```sh
